@@ -24,8 +24,7 @@ module.exports = () => ({
         app: resolve(config.rootDir, 'src/modules/core/js/create-app.js')
     },
     output: {
-        //path: resolve(config.rootDir, 'dist'),
-        path: join(config.rootDir, 'dist/'),
+        path: join(config.rootDir, 'dist'),
         publicPath: '/dist/',
         filename: isProd ? '[name].[chunkhash].js' : '[name].js',
         chunkFilename: isProd ? '_[name].[chunkhash].js' : '_[name].js',
