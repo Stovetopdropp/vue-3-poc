@@ -7,7 +7,9 @@
         "build": "cross-env NODE_ENV=production webpack --config build/webpack.config.js"
     },
     "dependencies": {
-        "vue": "3.0.0-beta.15"
+        "vue": "3.0.0-beta.15",
+        "vuex": "4.0.0-beta.2",
+        "vue-router": "4.0.0-alpha.13"
     },
     "devDependencies": {
         "@vue/compiler-sfc": "3.0.0-beta.15",
