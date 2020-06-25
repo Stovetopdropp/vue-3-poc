@@ -9,7 +9,7 @@
 
 <script>
 
-import { ref } from "vue";
+import { ref } from 'vue';
 
 import Modal from '~modules/core/components/Modal.vue';
 
