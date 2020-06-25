@@ -12,14 +12,13 @@
 
 <script>
 
+import { defineAsyncComponent } from 'vue';
 import { ref } from 'vue';
-
-import Modal from '~modules/core/components/Modal.vue';
 
 export default {
     name: 'App',
     components: {
-        Modal
+        Modal: defineAsyncComponent(() => import('~modules/core/components/Modal.vue'))
     },
     setup () {
         const modalOpen = ref(true);
