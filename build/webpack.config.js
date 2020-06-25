@@ -17,11 +17,11 @@ const config = {
     version,
 };
 
-module.exports = (env = {}) => ({
-    mode: env.prod ? 'production' : 'development',
-    devtool: env.prod ? 'source-map' : 'cheap-module-eval-source-map',
+module.exports = () => ({
+    mode: isProd ? 'production' : 'development',
+    devtool: isProd ? 'source-map' : 'cheap-module-eval-source-map',
     entry: {
-        app: './src/modules/core/js/create-app.js',
+        app: resolve(config.rootDir, 'src/modules/core/js/create-app.js')
     },
     output: {
         //path: resolve(config.rootDir, 'dist'),
@@ -59,7 +59,7 @@ module.exports = (env = {}) => ({
                 use: [
                     {
                         loader: MiniCssExtractPlugin.loader,
-                        options: { hmr: !env.prod }
+                        options: { hmr: !isProd }
                     },
                     'css-loader'
                 ]
