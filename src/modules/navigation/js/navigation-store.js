@@ -25,7 +25,7 @@ export default {
 
             await setTimeout(() => {
                 res = ['item 1', 'item 2', 'item 3'];
-            }, 500)
+            }, 500);
 
             commit(SET_NAVIGATION, res);
         },

@@ -1,15 +1,25 @@
 <template>
     <header class="c-header">
-        header
+        <Suspense>
+            <template #default>
+                <Navigation />
+            </template>
+            <template #fallback>
+                Loading...
+            </template>
+        </Suspense>
     </header>
 </template>
 
 <script>
 
-import { mapActions, mapMutations, mapState } from 'vuex';
+import Navigation from '~modules/navigation/components/Navigation.vue';
 
 export default {
     name: 'Header',
+    components: {
+        Navigation
+    }
 };
 
 </script>
