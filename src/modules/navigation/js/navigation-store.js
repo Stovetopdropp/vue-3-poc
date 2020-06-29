@@ -21,11 +21,9 @@ export default {
 
     actions: {
         async [LOAD_NAVIGATION]({ commit }) {
-            let res;
-
-            await setTimeout(() => {
-                res = ['item 1', 'item 2', 'item 3'];
-            }, 500);
+            const res = await new Promise((resolve) => {
+                setTimeout(() => resolve(['item 1', 'item 2', 'item 3']), 2000)
+            });
 
             commit(SET_NAVIGATION, res);
         },

@@ -5,7 +5,9 @@
                 <Navigation />
             </template>
             <template #fallback>
-                Loading...
+                <div class="c-header__loader">
+                   <p>Loading Navigation...</p>
+                </div>
             </template>
         </Suspense>
     </header>
@@ -38,4 +40,10 @@ export default {
         background-color: black;
         color: white;
     }
+
+    .c-header__loader {
+        width: 100%;
+        text-align: center;
+    }
+
 </style>
