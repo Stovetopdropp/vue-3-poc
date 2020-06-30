@@ -1,12 +1,12 @@
 <template>
     <button @click="toggleModalState">Open modal</button>
     <teleport to="#modal-wrapper">
-        <modal
+        <Modal
             v-if="modalOpen"
             @close="toggleModalState"
         >
             <p>Hello, I'm a modal window. teleport massive</p>
-        </modal>
+        </Modal>
     </teleport>
 </template>
 

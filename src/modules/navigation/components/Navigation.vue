@@ -42,6 +42,7 @@ export default {
         width: 100%;
         display: flex;
         justify-content: space-around;
+        align-self: center;
 
         &__item {
             display: inline-block;

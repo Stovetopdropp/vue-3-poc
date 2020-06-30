@@ -44,6 +44,7 @@ export default {
     .c-header__loader {
         width: 100%;
         text-align: center;
+        align-self: center;
     }
 
 </style>

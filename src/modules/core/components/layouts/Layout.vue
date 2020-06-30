@@ -14,6 +14,7 @@ export default {
 
 <style>
     .o-container {
-
+        position: relative;
+        padding-top: 64px;
     }
 </style>
