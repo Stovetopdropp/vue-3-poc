@@ -37,15 +37,14 @@ export default {
 
 </script>
 
-<style>
+<style lang="scss">
     .c-navigation {
         width: 100%;
         display: flex;
         justify-content: space-around;
-    }
 
-    .c-navigation__item {
-        display: inline-block;
+        &__item {
+            display: inline-block;
+        }
     }
 </style>
-

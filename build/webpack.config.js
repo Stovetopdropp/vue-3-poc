@@ -1,6 +1,7 @@
 const { join, resolve, path } = require('path');
 const { VueLoaderPlugin } = require('vue-loader')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const isProd = process.env.NODE_ENV === 'production';
 const isDev = process.env.NODE_ENV === 'development';
@@ -17,15 +18,55 @@ const config = {
     version,
 };
 
+function getCssLoaders(config) {
+    const { isProd, isDev, isLocal } = config;
+    const addlLoaders = [
+        ...(!isLocal ? [{
+            loader: 'postcss-loader',
+            options: {
+                config: {
+                    ctx: {
+                        enableAutoprefixer: true,
+                        minimize: isProd
+                    }
+                }
+            }
+        }] : [])
+    ];
+    const cssLoaders = [
+        {
+            loader: 'css-loader',
+            options: {
+                // Number of loaders applied prior to css-loader
+                importLoaders: addlLoaders.length
+            },
+        },
+        ...addlLoaders
+    ];
+
+    if (!isLocal) {
+        return [MiniCssExtractPlugin.loader, ...cssLoaders];
+    }
+
+    return ['vue-style-loader', ...cssLoaders];
+}
+
 module.exports = () => ({
     mode: isProd ? 'production' : 'development',
     devtool: isProd ? 'source-map' : 'cheap-module-eval-source-map',
+    // Only include core node polyfills in the client build when running
+    // locally as they seem to be needed by HMR.  This keeps our client bundle
+    // from growing unnecessarily.  See:
+    //   https://webpack.js.org/configuration/node/
+    ...(config.isLocal === true ? {} : {
+        node: false,
+    }),
     entry: {
         app: resolve(config.rootDir, 'src/modules/core/js/create-app.js')
     },
     output: {
         path: join(config.rootDir, 'dist'),
-        publicPath: '/dist/',
+        publicPath: '/',
         filename: isProd ? '[name].[chunkhash].js' : '[name].js',
         chunkFilename: isProd ? '_[name].[chunkhash].js' : '_[name].js',
     },
@@ -37,7 +78,8 @@ module.exports = () => ({
             // on the first HMR update and causes the page to reload.
             'vue': '@vue/runtime-dom',
             '~modules': resolve(config.rootDir, 'src/modules'),
-            '~routes': resolve(config.rootDir, 'src/routes')
+            '~routes': resolve(config.rootDir, 'src/routes'),
+            '~scss': resolve(config.rootDir, 'src/scss')
         }
     },
     module: {
@@ -55,27 +97,45 @@ module.exports = () => ({
             },
             {
                 test: /\.css$/,
+                use: getCssLoaders(config)
+            },
+            {
+                test: /\.scss$/,
                 use: [
+                    ...getCssLoaders(config),
                     {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: { hmr: !isProd }
-                    },
-                    'css-loader'
+                        loader: 'sass-loader',
+                        options: {
+                            prependData: `
+                                @import "~scss/variables/global-variables.scss";
+                                @import "~scss/mixins/global-mixins.scss";
+                            `
+                        }
+                    }
                 ]
             }
         ]
     },
     plugins: [
+        new HtmlWebpackPlugin({
+            template: 'src/index.html'
+        }),
         new VueLoaderPlugin(),
-        new MiniCssExtractPlugin({
-            filename: '[name].css'
-        })
+        ...(!config.isLocal ? [
+            new MiniCssExtractPlugin({
+                filename: config.isProd ? 'app.[contenthash].css' : 'app.css',
+                chunkFilename: config.isProd ? '[name].[contenthash].css' : '[name].css',
+                insertInto: function insertInto(/* href */) {
+                    return document.querySelector('head');
+                }
+            })
+        ] : []),
     ],
     devServer: {
-        inline: true,
-        hot: true,
+        inline: config.isLocal,
+        hot: config.isLocal,
         stats: 'minimal',
-        contentBase: rootDir,
-        overlay: true
+        overlay: true,
+        publicPath: '/'
     }
 });

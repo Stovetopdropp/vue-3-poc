@@ -1,0 +1,29 @@
+$breakpoints: (
+    extra-small: 0px,
+    small: 568px,
+    medium: 768px,
+    large: 1025px,
+    extra-large: 1441px
+);
+
+@mixin breakpoint($name) {
+    @if not map-has-key($breakpoints, $name) {
+        @warn "Warning: `#{$name}` is not a valid breakpoint name.";
+    } @else {
+        @media (min-width: map-get($breakpoints, $name)) {
+            @content;
+        }
+    }
+}
+
+@mixin non-touch-device {
+    @media (hover: hover) and (pointer: fine) {
+        @content;
+    }
+}
+
+@mixin touch-device {
+    @media (pointer: coarse) {
+        @content;
+    }
+}
