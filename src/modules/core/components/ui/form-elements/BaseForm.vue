@@ -1,28 +1,32 @@
-<!-- <template>
-    <form novalidate @submit.prevent="handleSubmit">
+<template>
+    <Form @submit="handleSubmit" :validation-schema="validationSchema">
         <slot></slot>
         <div :class="buttonContainerClass">
-            <LoadingButton
+            <button
                 type="submit"
-                :isLoading="isLoading"
                 :class="buttonClass"
                 :disabled="isDisabled"
             >
                 {{ submitButton.text }}
-            </LoadingButton>
+            </button>
         </div>
-    </form>
+    </Form>
 </template>
 
 <script>
-import LoadingButton from '~modules/core/components/ui/buttons/LoadingButton.vue';
+
+import { Form } from 'vee-validate';
 
 export default {
-    name: 'Form',
+    name: 'BaseForm',
     components: {
-        LoadingButton,
+        Form
     },
     props: {
+        validationSchema: {
+            type: Object,
+            default: {}
+        },
         onSubmit: {
             type: Function,
             required: true,
@@ -92,4 +96,5 @@ export default {
 <style lang="scss">
 
 </style>
- -->
+
+

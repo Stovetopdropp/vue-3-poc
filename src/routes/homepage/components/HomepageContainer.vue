@@ -4,19 +4,14 @@
             <h1>Vue 3 Playground</h1>
 
             <h3>Form Validation</h3>
-            <Form @submit="onSubmit" v-slot="{ errors }" :validation-schema="formSchema">
-                <Field name="field1" v-slot="{ field }">
-                   <!-- v-model="homepageInputValue" is shorthand for v-model:modelValue="homepageInputValue" -->
-                    <BaseInput
-                        v-bind="field"
-                        v-model="field1"
-                        name="field1"
-                        label="Example"
-                        :errorMessage="errors.field1"
-                    />
-                </Field>
-                <br>
-
+            <BaseForm
+                v-slot="{ errors }"
+                :onSubmit="onSubmit"
+                :validationSchema="formSchema"
+                :submitButton="{
+                    'text': 'Submit'
+                }"
+            >
                 <BaseInputVee
                     name="name"
                     type="text"
@@ -25,7 +20,6 @@
                     success-message="Wow good job entering your name bud!!"
                 />
                 <br>
-
                 <BaseInputVee
                     name="email"
                     type="text"
@@ -33,8 +27,7 @@
                     placeholder="Your Email"
                 />
                 <br>
-                <button type="submit">Submit</button>
-            </Form>
+            </BaseForm>
             <br>
             <ModalSingleton />
         </div>
@@ -49,12 +42,14 @@ import * as Yup from 'yup';
 
 import Layout from '~modules/core/components/layouts/Layout.vue';
 
+import BaseForm from '~modules/core/components/ui/form-elements/BaseForm.vue';
 import BaseInput from '~modules/core/components/ui/form-elements/BaseInput.vue';
 import BaseInputVee from '~modules/core/components/ui/form-elements/BaseInputVee.vue';
 
 export default {
     name: 'HomepageContainer',
     components: {
+        BaseForm,
         BaseInput,
         BaseInputVee,
         Field,
@@ -65,16 +60,19 @@ export default {
     data() {
         return {
             formSchema: Yup.object().shape({
-                field1: Yup.string().required(),
                 name: Yup.string().min(2).required(),
                 email: Yup.string().email().required(),
             })
         };
     },
     methods: {
-        onSubmit(values) {
+        async onSubmit(values) {
             // this only fires if validation passes
-            alert('what a success you are')
+            const res = await new Promise((resolve) => {
+                setTimeout(() => resolve({ msg: '!!!!!'}), 750);
+            });
+
+            console.log(`successful mission boys ${res.msg}`)
         }
     }
 };
